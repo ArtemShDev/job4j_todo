@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!--    <meta http-equiv="Refresh" content="30"/>-->
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+
+</head>
+<body>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script>
+    $(document).ready(loadItemsDrawTable());
+    function loadItemsDrawTable() {
+        $.ajax({
+            type: 'GET',
+            url: 'http://localhost:8080/job4j_todo/items?showAll='+$('#showAll').prop('checked'),
+            dataType: 'json'
+        }).done(function (data) {
+            var tbody = document.getElementById('table_body');
+            for (var item of data) {
+                addRowTheTable(item);
+            }
+        }).fail(function (err) {
+            console.log(err);
+        });
+    }
+    function addRowTheTable(item) {
+        var tbody = document.getElementById('table_body');
+        let row = document.createElement('tr');
+        row.setAttribute("id", "id_" + item.id);
+        let row_th = document.createElement('th');
+        row_th.setAttribute("class", "table-active");
+        row_th.innerHTML = item.id;
+        row.appendChild(row_th);
+
+        let row_td = document.createElement('td');
+        row_td.setAttribute("class", "table-active");
+        row_td.innerHTML = item.description;
+
+        row.appendChild(row_td);
+        let row_cell = document.createElement('td');
+        let row_input = document.createElement('input');
+        row_input.setAttribute("type", "checkbox");
+        row_input.setAttribute("id", "done");
+        row_input.setAttribute("idDB", item.id);
+        row_input.setAttribute("onchange", "selectDone("+item.id+")");
+        if (item.done) {
+            row.setAttribute("bgcolor", "#80cb64");
+            row_input.setAttribute("disabled", "disabled");
+            row_input.setAttribute("checked", "checked");
+        }
+        row_cell.appendChild(row_input);
+        row.appendChild(row_cell);
+        tbody.appendChild(row);
+    }
+</script>
+
+<script>
+    function selectDone(paramId) {
+        let elems = document.getElementById("id_" + paramId).querySelectorAll('.table-active');
+        var dataJ = JSON.stringify({id: Number (elems[0].innerHTML), description: elems[1].innerHTML, done: true});
+        console.log(dataJ);
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/job4j_todo/items?id=' + paramId,
+            // data: "{\"id\":32,\"description\":\"AAAAAAAAAAAAAA\",\"done\":true}",
+            data: dataJ,
+            dataType: 'json'
+        }).done(function (data) {
+            showAllIt();
+        }).fail(function (err) {
+            console.log(err);
+        });
+    }
+</script>
+<script>
+    function clearTable() {
+        var elem = document.getElementById('table_body');
+        elem.parentNode.removeChild(elem);
+        var tb = document.createElement('tbody');
+        tb.setAttribute("id", "table_body");
+        var elemTab = document.getElementById('items_tab');
+        elemTab.appendChild(tb);
+        return false;
+    }
+</script>
+<script>
+    function addItem() {
+        if ($('#formNameItem').val() === '') {
+            alert('Please, ' + $('#formNameItem').attr('placeholder'));
+            return false;
+        }
+        if ($('#formDescItem').val() === '') {
+            alert('Please, ' + $('#formDescItem').attr('placeholder'));
+            return false;
+        }
+        //
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:8080/job4j_todo/items?descItem=' + $('#formDescItem').val(),
+            data: "",
+            dataType: 'json'
+        }).done(function (data) {
+            addRowTheTable(data);
+        }).fail(function (err) {
+            console.log(err);
+        });
+
+        return true;
+    }
+</script>
+<script>
+    function showAllIt() {
+        clearTable();
+        loadItemsDrawTable();
+        return false;    }
+</script>
+
+<div class="container">
+<!--    <form action= "http://localhost:8080/job4j_todo/items" method= "POST" id="form_item">-->
+    <form id="form_item">
+        <div class="form-group">
+            <h5>New Item:</h5>
+            <input type="text" class="form-control" id="formNameItem" name="nameItem" placeholder="Enter the name of item">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="formDescItem" name="descItem" placeholder="Write details...">
+        </div>
+<!--        <button type="submit" class="btn btn-success" onclick="return addItem();">Add</button>-->
+        <button type="button" class="btn btn-success" onclick="return addItem();">Add</button>
+        <br/>
+        <br/>
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="showAll" onchange="showAllIt()">
+            <label class="form-check-label" for="showAll" > Show All Items</label>
+        </div>
+        <div class="row pt-3">
+            <h5>Item's list:</h5>
+            <table width="80%" class="table table-dark" id="items_tab" name="items">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Item</th>
+                    <th scope="col">Done</th>
+                </tr>
+                </thead>
+                <tbody id="table_body">
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+</body>
+</html>

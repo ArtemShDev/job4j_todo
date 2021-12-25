@@ -1,9 +1,9 @@
 create table if not exists users (
                                      id serial primary key,
                                      username varchar(100) not null,
-    email varchar(100) not null unique,
-    password varchar(100) not null
-    );
+                                     email varchar(100) not null unique,
+                                     password varchar(100) not null
+);
 
 create table if not exists items (
                                       id serial primary key,

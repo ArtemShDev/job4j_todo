@@ -9,36 +9,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
-public class ItemServlet extends HttpServlet {
+public class ItemModifyServlet extends HttpServlet {
 
     private static final Gson GSON = new GsonBuilder().create();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("application/json; charset=utf-8");
-        OutputStream output = resp.getOutputStream();
-        String json = GSON.toJson(StoreHibernate.instOf().findActual());
-        if ("true".equals(req.getParameter("showAll"))) {
-            json = GSON.toJson(StoreHibernate.instOf().findAll());
-        }
-        output.write(json.getBytes(StandardCharsets.UTF_8));
-        output.flush();
-        output.close();
-    }
-
-    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        String descItem = req.getParameter("descItem");
-        Item item = new Item(descItem, false);
-        StoreHibernate.instOf().add(item);
+        int id = Integer.parseInt(req.getParameter("id"));
         resp.setContentType("application/json; charset=utf-8");
         OutputStream output = resp.getOutputStream();
-        String json = GSON.toJson(item);
+        String json = GSON.toJson(StoreHibernate.instOf().replace(id));
         output.write(json.getBytes(StandardCharsets.UTF_8));
         output.flush();
         output.close();

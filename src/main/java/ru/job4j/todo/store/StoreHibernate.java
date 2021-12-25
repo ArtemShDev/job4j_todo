@@ -14,19 +14,22 @@ import java.util.function.Function;
 
 public class StoreHibernate implements Store, AutoCloseable {
 
-    private static final StoreHibernate INSTANCE = new StoreHibernate();
-
-    private final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-            .configure().build();
-    private final SessionFactory sf = new MetadataSources(registry)
-            .buildMetadata().buildSessionFactory();
+    private final StandardServiceRegistry registry;
+    private final SessionFactory sf;
 
     private StoreHibernate() {
-
+        registry = new StandardServiceRegistryBuilder()
+                .configure().build();
+        sf = new MetadataSources(registry)
+                .buildMetadata().buildSessionFactory();
     }
 
-    public static StoreHibernate instOf() {
-        return INSTANCE;
+    private static final class Lazy {
+        private static final Store INST = new StoreHibernate();
+    }
+
+    public static Store instOf() {
+        return Lazy.INST;
     }
 
     @Override
@@ -36,9 +39,9 @@ public class StoreHibernate implements Store, AutoCloseable {
     }
 
     @Override
-    public boolean replace(int id, Item item) {
-        item.setId(id);
-        return tu(session -> session.update(item));
+    public boolean replace(int id) {
+        return tu(session -> session.createQuery("update Item set done = true where id = :id")
+                .setParameter("id", id).executeUpdate());
     }
 
     @Override
@@ -89,18 +92,5 @@ public class StoreHibernate implements Store, AutoCloseable {
         } finally {
             session.close();
         }
-    }
-
-    public static void main(String[] args) {
-        Item item = new Item("Description of Test Item", false);
-        Item item1 = new Item("Description of Test Item2", false);
-        Item item2 = new Item("Description of Test Item3", false);
-        Item item3 = new Item("Description of Test Item4", false);
-        Item item4 = new Item("Description of Test Item5", false);
-        INSTANCE.add(item);
-        INSTANCE.add(item1);
-        INSTANCE.add(item2);
-        INSTANCE.add(item3);
-        INSTANCE.add(item4);
     }
 }

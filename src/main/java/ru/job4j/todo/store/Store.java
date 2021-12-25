@@ -8,7 +8,7 @@ public interface Store {
 
     Item add(Item item);
 
-    boolean replace(int id, Item item);
+    boolean replace(int id);
 
     List<Item> findAll();
 

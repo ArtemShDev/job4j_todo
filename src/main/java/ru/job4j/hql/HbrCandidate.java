@@ -26,6 +26,7 @@ public class HbrCandidate {
         replace(candidate2);
         delete(candidate1);
         System.out.println(findAll());
+        System.out.println(findByName(candidate1.getName()));
     }
 
     private static void addFirst(Candidate candidate) {
@@ -45,6 +46,11 @@ public class HbrCandidate {
 
     private static List<Candidate> findAll() {
         return tx(session -> session.createQuery("from Candidate").list());
+    }
+
+    private static List<Candidate> findByName(String name) {
+        return tx(session -> session.createQuery("from Candidate where name = :name")
+                .setParameter("name", name).list());
     }
 
     private static boolean delete(Candidate candidate) {

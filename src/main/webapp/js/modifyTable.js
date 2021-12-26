@@ -1,9 +1,14 @@
+
 $(document).ready(loadItemsDrawTable());
 
 function loadItemsDrawTable() {
+    var showByUser = '';
+    if ($('#showUsersItems').prop('checked')) {
+        showByUser = '&showByUser=true';
+    }
     $.ajax({
         type: 'GET',
-        url: 'http://localhost:8080/job4j_todo/items?showAll='+$('#showAll').prop('checked'),
+        url: 'http://localhost:8080/job4j_todo/items?showAll='+$('#showAll').prop('checked') + showByUser,
         dataType: 'json'
     }).done(function (data) {
         for (var item of data) {

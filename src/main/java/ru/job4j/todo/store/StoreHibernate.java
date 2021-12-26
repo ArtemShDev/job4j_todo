@@ -7,8 +7,10 @@ import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.todo.model.Item;
+import ru.job4j.todo.model.User;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -39,24 +41,42 @@ public class StoreHibernate implements Store, AutoCloseable {
     }
 
     @Override
+    public boolean addUser(User user) {
+        return tu(session -> session.save(user));
+    }
+
+    @Override
     public boolean replace(int id) {
         return tu(session -> session.createQuery("update Item set done = true where id = :id")
                 .setParameter("id", id).executeUpdate());
     }
 
     @Override
-    public List<Item> findAll() {
-        return tx(session -> session.createQuery("from Item").list());
+    public List<Item> findItems(String all) {
+        String query = ("true".equals(all) ? "" : " where done = false");
+        return tx(session -> session.createQuery("from Item" + query).list());
     }
 
     @Override
-    public List<Item> findActual() {
-        return tx(session -> session.createQuery("from Item where done = false").list());
+    public List<Item> findUserItems(String email, String all) {
+        String query = ("true".equals(all) ? "" : " and done = false");
+        return tx(session -> session.createQuery("from Item where user in (from User where email = :em)" + query)
+                .setParameter("em", email).list());
     }
 
     @Override
     public Item getItem(int id) {
         return tx(session -> session.get(Item.class, id));
+    }
+
+    @Override
+    public User findUser(String email) {
+        try {
+           return (User) tx(session -> session.createQuery("from User where email = :em")
+                    .setParameter("em", email).stream().findFirst().get());
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 
     @Override

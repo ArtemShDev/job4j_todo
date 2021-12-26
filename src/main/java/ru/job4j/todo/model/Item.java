@@ -14,6 +14,9 @@ public class Item {
     private String description;
     private Timestamp created = new Timestamp(Calendar.getInstance().getTime().getTime());
     private boolean done;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Item() {
     }
@@ -27,6 +30,20 @@ public class Item {
         this.id = id;
         this.description = description;
         this.done = done;
+    }
+
+    public Item(String description, boolean done, User user) {
+        this.description = description;
+        this.done = done;
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public int getId() {

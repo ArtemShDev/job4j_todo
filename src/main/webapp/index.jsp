@@ -1,5 +1,7 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
-<html lang="en">
+<%--<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">--%>
 <head>
 <!--    <meta http-equiv="Refresh" content="30"/>-->
     <!-- Required meta tags -->
@@ -27,8 +29,41 @@
         crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/job4j_todo/js/modifyTable.js"></script>
+<script type="text/javascript">
 
+    var name = '<%= session.getAttribute("user") %>';
+    //sessionStora
+    console.log(name);
+<%--//     <%String session_val = (String)session.getAttribute("sessionval");--%>
+// System.out.println("session_val"+session_val);
+// %>
+</script>
+<%--<%--%>
+<%--    String id = request.getParameter("id");--%>
+<%--    Post post = new Post(0, "", "new vacancy", Calendar.getInstance());--%>
+<%--    if (id != null) {--%>
+<%--        post = DbStore.instOf().findById(Integer.valueOf(id));--%>
+<%--    }--%>
+<%--%>--%>
 <div class="container">
+    <div class="row">
+        <ul class="nav">
+            <c:if test="${user == null}">
+                <li class="nav-item">
+                    <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">Войти</a>
+                </li>
+            </c:if>
+            <c:if test="${user != null}">
+                <li class="nav-item">
+                    <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp"> <c:out
+                            value="${user.name}"/></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<%=request.getContextPath()%>/logout.do">| Выйти</a>
+                </li>
+            </c:if>
+        </ul>
+    </div>
 <!--    <form action= "http://localhost:8080/job4j_todo/items" method= "POST" id="form_item">-->
     <form id="form_item">
         <div class="form-group">
@@ -46,6 +81,12 @@
             <input type="checkbox" class="form-check-input" id="showAll" onchange="showAllIt()">
             <label class="form-check-label" for="showAll" > Show All Items</label>
         </div>
+        <c:if test="${user != null}">
+            <div class="form-group form-check">
+                <input type="checkbox" class="form-check-input" id="showUsersItems" onchange="showAllIt()">
+                <label class="form-check-label" for="showUsersItems" > Show User's Items</label>
+            </div>
+        </c:if>
         <div class="row pt-3">
             <h5>Item's list:</h5>
             <table width="80%" class="table table-dark" id="items_tab" name="items">

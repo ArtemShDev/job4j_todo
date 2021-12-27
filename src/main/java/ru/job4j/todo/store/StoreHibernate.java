@@ -71,12 +71,8 @@ public class StoreHibernate implements Store, AutoCloseable {
 
     @Override
     public User findUser(String email) {
-        try {
-           return (User) tx(session -> session.createQuery("from User where email = :em")
-                    .setParameter("em", email).stream().findFirst().get());
-        } catch (NoSuchElementException e) {
-            return null;
-        }
+        return (User) tx(session -> session.createQuery("from User where email = :em")
+                .setParameter("em", email).uniqueResult());
     }
 
     @Override

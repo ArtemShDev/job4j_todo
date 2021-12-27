@@ -22,6 +22,8 @@
         <mapping class="ru.job4j.hql.Candidate" />
         <mapping class="ru.job4j.hbr.cars.Model" />
         <mapping class="ru.job4j.hbr.cars.Brand" />
+        <mapping class="ru.job4j.hbr.lazy.Model2" />
+        <mapping class="ru.job4j.hbr.lazy.Brand2" />
         <mapping class="ru.job4j.hbr.manytomany.Author" />
         <mapping class="ru.job4j.hbr.manytomany.Book" />
     </session-factory>

@@ -16,6 +16,7 @@ public class HbrRun {
             Session session = sf.openSession();
             session.beginTransaction();
             Brand toyota = new Brand("Toyota");
+            addModels(toyota);
             session.save(toyota);
             session.getTransaction().commit();
             session.close();

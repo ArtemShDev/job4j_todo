@@ -1,5 +1,6 @@
 package ru.job4j.todo.store;
 
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 
@@ -21,4 +22,5 @@ public interface Store {
 
     User findUser(String email);
 
+    List<Category> findCategories();
 }

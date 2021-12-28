@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
@@ -39,8 +38,10 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        String[] catIds = req.getParameterValues("catIds");
         String descItem = req.getParameter("descItem");
         Item item = new Item(descItem, false);
+        item.addCategories(catIds);
         item.setUser((User) req.getSession().getAttribute("user"));
         StoreHibernate.instOf().add(item);
         resp.setContentType("application/json; charset=utf-8");

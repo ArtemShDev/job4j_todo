@@ -1,3 +1,7 @@
+<%@ page import="java.util.Calendar" %>
+<%@ page import="ru.job4j.todo.store.StoreHibernate" %>
+<%@ page import="java.util.List" %>
+<%@ page import="ru.job4j.todo.model.Category" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <!doctype html>
@@ -30,21 +34,15 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/job4j_todo/js/modifyTable.js"></script>
 <script type="text/javascript">
-
     var name = '<%= session.getAttribute("user") %>';
-    //sessionStora
     console.log(name);
-<%--//     <%String session_val = (String)session.getAttribute("sessionval");--%>
-// System.out.println("session_val"+session_val);
-// %>
 </script>
-<%--<%--%>
-<%--    String id = request.getParameter("id");--%>
-<%--    Post post = new Post(0, "", "new vacancy", Calendar.getInstance());--%>
-<%--    if (id != null) {--%>
-<%--        post = DbStore.instOf().findById(Integer.valueOf(id));--%>
-<%--    }--%>
-<%--%>--%>
+<%
+    if (request.getSession().getAttribute("allCat") == null) {
+        List<Category> allCat = StoreHibernate.instOf().findCategories();
+        request.getSession().setAttribute("allCat", allCat);
+    }
+%>
 <div class="container">
     <div class="row">
         <ul class="nav">
@@ -72,6 +70,18 @@
         </div>
         <div class="form-group">
             <input type="text" class="form-control" id="formDescItem" name="descItem" placeholder="Write details...">
+        </div>
+        <div class="form-group">
+            <label class="col-form-label col-sm-3" for="catIds" style="font-weight: 900">Categories of items</label>
+            <div class="col-sm-5">
+                <select class="form-control" name="catIds" id="catIds" multiple>
+<%--                    <c:forEach items="${allCat}" var="category">--%>
+<%--                    <c:forEach items="<%=session.getAttribute("allCat")%>" var="category">--%>
+                    <c:forEach items="${allCat}" var="category">
+                        <option value='<c:out value="${category.id}"/>'><c:out value="${category.name}"/></option>
+                    </c:forEach>
+                </select>
+            </div>
         </div>
 <!--        <button type="submit" class="btn btn-success" onclick="return addItem();">Add</button>-->
         <button type="button" class="btn btn-success" onclick="return addItem();">Add</button>

@@ -86,7 +86,8 @@ function addItem() {
     }
     $.ajax({
         type: 'POST',
-        url: 'http://localhost:8080/job4j_todo/items?descItem=' + $('#formDescItem').val(),
+        url: 'http://localhost:8080/job4j_todo/items?descItem=' + $('#formDescItem').val()
+        + '&catIds=' + $('#catIds').val(),
         data: "",
         dataType: 'json'
     }).done(function (data) {

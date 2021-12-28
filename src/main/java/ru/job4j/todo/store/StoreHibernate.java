@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import ru.job4j.todo.model.Category;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.User;
 
@@ -73,6 +74,11 @@ public class StoreHibernate implements Store, AutoCloseable {
     public User findUser(String email) {
         return (User) tx(session -> session.createQuery("from User where email = :em")
                 .setParameter("em", email).uniqueResult());
+    }
+
+    @Override
+    public List<Category> findCategories() {
+        return tx(session -> session.createQuery("from Category").list());
     }
 
     @Override

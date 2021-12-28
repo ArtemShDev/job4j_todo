@@ -39,5 +39,5 @@ CREATE TABLE IF NOT EXISTS history_owner (
                                              id serial primary key,
                                              driver_id integer NOT NULL REFERENCES drivers(id),
     car_id integer NOT NULL REFERENCES cars(id),
-    CONSTRAINT history_owner_pkey PRIMARY KEY (driver_id, car_id)
+    CONSTRAINT history_owner_pkey UNIQUE (driver_id, car_id)
     );

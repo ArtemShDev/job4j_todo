@@ -1,8 +1,7 @@
 package ru.job4j.todo.model;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +13,8 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String description;
-    private Timestamp created = new Timestamp(Calendar.getInstance().getTime().getTime());
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created = new Date(System.currentTimeMillis());
     private boolean done;
     @ManyToOne
     @JoinColumn(name = "user_id")

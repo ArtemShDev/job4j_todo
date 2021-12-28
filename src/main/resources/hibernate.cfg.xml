@@ -28,5 +28,8 @@
         <mapping class="ru.job4j.hbr.lazy.Brand2" />
         <mapping class="ru.job4j.hbr.manytomany.Author" />
         <mapping class="ru.job4j.hbr.manytomany.Book" />
+        <mapping class="ru.job4j.hbr.manytomany.Car" />
+        <mapping class="ru.job4j.hbr.manytomany.Driver" />
+        <mapping class="ru.job4j.hbr.manytomany.Engine" />
     </session-factory>
 </hibernate-configuration>

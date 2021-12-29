@@ -6,8 +6,9 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 public class HbrCandidate {
@@ -17,16 +18,13 @@ public class HbrCandidate {
     private static final SessionFactory SF = new MetadataSources(REGISTRY).buildMetadata().buildSessionFactory();
 
     public static void main(String[] args) {
-        Candidate candidate1 = new Candidate("Java Junior", "1 year", 100);
-        Candidate candidate2 = new Candidate("Java Middle", "2 year", 200);
-        addFirst(candidate1);
-        add(candidate1);
-        add(candidate1);
-        addFirst(candidate2);
-        replace(candidate2);
-        delete(candidate1);
-        System.out.println(findAll());
-        System.out.println(findByName(candidate1.getName()));
+        Candidate candidate = new Candidate("Java Middle +++", "3 year", 500);
+        Base base = new Base("TEST", Set.of(new Vacancy("Java1"),
+                new Vacancy("Java2"), new Vacancy("Java3")));
+        candidate.setBase(base);
+        addFirst(candidate);
+        Candidate candidateDB = findCandidateById(candidate.getId());
+        System.out.println(candidateDB.getBase().getVacancies());
     }
 
     private static void addFirst(Candidate candidate) {
@@ -56,6 +54,12 @@ public class HbrCandidate {
     private static boolean delete(Candidate candidate) {
         return tx(session -> session.createQuery("delete from Candidate where id = :id")
         .setParameter("id", candidate.getId()).executeUpdate()) > 0;
+    }
+
+    private static Candidate findCandidateById(int id) {
+        return tx(session -> session.createQuery("select distinct can from Candidate can "
+                + "join fetch can.base b join fetch b.vacancies where can.id = :id", Candidate.class)
+                .setParameter("id", id).uniqueResult());
     }
 
     private static <T> T tx(final Function<Session, T> command) {

@@ -12,6 +12,9 @@ public class Candidate {
     private String name;
     private String experience;
     private int salary;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "base_id")
+    private Base base;
 
     public Candidate() {
     }
@@ -20,6 +23,13 @@ public class Candidate {
         this.name = name;
         this.experience = experience;
         this.salary = salary;
+    }
+
+    public Candidate(String name, String experience, int salary, Base base) {
+        this.name = name;
+        this.experience = experience;
+        this.salary = salary;
+        this.base = base;
     }
 
     public int getId() {
@@ -52,6 +62,14 @@ public class Candidate {
 
     public void setSalary(int salary) {
         this.salary = salary;
+    }
+
+    public Base getBase() {
+        return base;
+    }
+
+    public void setBase(Base base) {
+        this.base = base;
     }
 
     @Override

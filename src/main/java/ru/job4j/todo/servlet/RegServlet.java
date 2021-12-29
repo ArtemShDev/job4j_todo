@@ -25,7 +25,7 @@ public class RegServlet extends HttpServlet {
                 resp.sendRedirect(req.getContextPath() + "/index.jsp");
             }
         } else {
-            req.setAttribute("error", "Пользователь с таким email уже существует");
+            req.setAttribute("error", "This email already exist");
             req.getRequestDispatcher("reg.jsp").forward(req, resp);
         }
     }

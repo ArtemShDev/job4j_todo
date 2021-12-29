@@ -1,4 +1,3 @@
-<%@ page import="java.util.Calendar" %>
 <%@ page import="ru.job4j.todo.store.StoreHibernate" %>
 <%@ page import="java.util.List" %>
 <%@ page import="ru.job4j.todo.model.Category" %>
@@ -48,7 +47,7 @@
         <ul class="nav">
             <c:if test="${user == null}">
                 <li class="nav-item">
-                    <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">Войти</a>
+                    <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">Login</a>
                 </li>
             </c:if>
             <c:if test="${user != null}">
@@ -57,7 +56,7 @@
                             value="${user.name}"/></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="<%=request.getContextPath()%>/logout.do">| Выйти</a>
+                    <a class="nav-link" href="<%=request.getContextPath()%>/logout.do">| Logout</a>
                 </li>
             </c:if>
         </ul>

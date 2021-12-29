@@ -38,19 +38,19 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Авторизация
+                Auth
             </div>
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/auth.do" method="post">
                     <div class="form-group">
-                        <label>Почта</label>
+                        <label>Email</label>
                         <input type="text" class="form-control" name="email" id="Email">
                     </div>
                     <div class="form-group">
-                        <label>Пароль</label>
+                        <label>Password</label>
                         <input type="password" class="form-control" name="password" id="Password">
                     </div>
-                    <button type="submit" class="btn btn-primary" onclick="return validate();">Войти</button>
+                    <button type="submit" class="btn btn-primary" onclick="return validate();">Login</button>
                     <c:if test="${not empty error}">
                         <div style="color:red; font-weight: bold; margin: 30px 0;">
                             <c:out value="${error}"/>
@@ -60,7 +60,7 @@
             </div>
         <div>
             <a class="nav-link" href="<%=request.getContextPath()%>/reg.jsp">
-                Регистрация
+                Registration
             </a>
         </div>
         </div>

@@ -41,23 +41,23 @@
     <div class="row">
         <div class="card" style="width: 100%">
             <div class="card-header">
-                Регистрация нового пользователя
+                New user
             </div>
             <div class="card-body">
                 <form action="<%=request.getContextPath()%>/reg.do" method="post">
                     <div class="form-group">
-                        <label>Логин</label>
+                        <label>Login</label>
                         <input type="text" class="form-control" name="name" id="userName">
                     </div>
                     <div class="form-group">
-                        <label>Почта</label>
+                        <label>Email</label>
                         <input type="text" class="form-control" name="email" id="Email">
                     </div>
                     <div class="form-group">
-                        <label>Пароль</label>
+                        <label>Password</label>
                         <input type="password" class="form-control" name="password" id="Password">
                     </div>
-                    <button type="submit" class="btn btn-primary" onclick="return validate();">Зарегистрироваться</button>
+                    <button type="submit" class="btn btn-primary" onclick="return validate();">Registration</button>
                     <c:if test="${not empty error}">
                         <div style="color:red; font-weight: bold; margin: 30px 0;">
                             <c:out value="${error}"/>
